@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300&family=Prompt:wght@300;600&display=swap');
+
+
+body {
+    font-family: 'Kanit', sans-serif;
+
+}
+.pointer {
+    cursor: pointer;
+}
+.equal-size-image {
+    width: 100px; /* เปลี่ยนเป็นขนาดที่คุณต้องการ */
+    height: 100px; /* เปลี่ยนเป็นขนาดที่คุณต้องการ */
+    object-fit: cover; /* ป้องกันรูปภาพหลุดจากขอบ */
+  }
+
+.size-image {
+    max-width: 100%; /* เปลี่ยนเป็นขนาดที่คุณต้องการ */
+    height: auto; /* เปลี่ยนเป็นขนาดที่คุณต้องการ */
+  }
+
+
+.login-logo img {
+    max-width: 100%;
+    height: auto;
+}
+
+.login-page {
+    height: auto;
+    /* background: linear-gradient(to right bottom,#2980B9,#6DD5FA,#FFFFFF); */
+    background: linear-gradient(to bottom,#076585,#FFFFFF);
+
+}
+.card {
+    transition: transform 0.3s ease;
+    border-radius: 10px; /* ค่า border-radius ที่คุณต้องการ */
+    overflow: hidden; /* คำสั่งเพื่อให้มุมของเนื้อหาภายในไม่แสดงออกนอกพื้นที่ของการ์ด */
+}
+.small-box{
+    transition: transform 0.3s ease;
+    border-radius: 10px; /* ค่า border-radius ที่คุณต้องการ */
+    overflow: hidden; /* คำสั่งเพื่อให้มุมของเนื้อหาภายในไม่แสดงออกนอกพื้นที่ของการ์ด */
+}
+.sidebar-gardians {
+    background: linear-gradient(to bottom,#0d3d69, #7ed6f7);
+}
+.user-panel {
+    border-bottom: 5px dotted #b4bcc3 !important;
+}
+.brand-link {
+    border-bottom: none !important;
+}
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-item.disabled .page-link {
+    color: #888;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.page-link {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+    border: 1px solid #007bff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.page-link:hover {
+    background-color: #f0f0f0;
+}
+
