@@ -113,9 +113,10 @@ class CustomAuthController extends Controller
         try {
 
             $url = env('API_URL') . '/role-stock/' . $code;
+            $token = env('API_TOKEN');
 
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer 1|LcbxpDu7J2Dj2DkRlAKM6649tSSdwuJtKfcoSQhR'
+                'Authorization' => 'Bearer '.$token
             ])->get($url);
 
 
@@ -159,40 +160,79 @@ class CustomAuthController extends Controller
         }
     }
 
-    public function AllowLoginConnect(Request $request,$id,$token)
+    // public function AllowLoginConnect(Request $request,$id,$token)
+    // {
+
+    //     $user = User::where('code', '=', $id)->orWhere('old_code', '=', $id)->first();
+    //     //dd($user);
+    //     if($user){
+    //         $request->session()->put('loginId',$user->id);
+    //         // Auth::login($user);
+    //         $user->last_login_at = date('Y-m-d H:i:s');
+    //         $user->save();
+    //         $checkToken = User::where('token', '=', $token)->first();
+
+    //         if ($checkToken) {
+    //             DB::table('vbeyond_report.log_login')->insert([
+    //                 'username' => $user->code,
+    //                 'dates' => date('Y-m-d'),
+    //                 'timeStm' => date('Y-m-d H:i:s'),
+    //                 'page' => 'Stock'
+    //             ]);
+
+    //             Log::addLog($request->session()->get('loginId'), '', 'Login AllowLoginConnect By vBisConnect');
+    //             return redirect('/');
+    //         }else{
+    //             $request->session()->pull('loginId');
+    //             return redirect('/');
+    //         }
+
+
+    //         }else if($user->active==0){
+    //             $request->session()->pull('loginId');
+    //             return redirect('/');
+    //         }else{
+    //             return redirect('/');
+    //         }
+
+    // }
+    public function AllowLoginConnect(Request $request,$code,$token)
     {
 
-        $user = User::where('code', '=', $id)->orWhere('old_code', '=', $id)->first();
-        //dd($user);
-        if($user){
-            $request->session()->put('loginId',$user->id);
-            // Auth::login($user);
-            $user->last_login_at = date('Y-m-d H:i:s');
-            $user->save();
-            $checkToken = User::where('token', '=', $token)->first();
+        try {
 
-            if ($checkToken) {
-                DB::table('vbeyond_report.log_login')->insert([
-                    'username' => $user->code,
-                    'dates' => date('Y-m-d'),
-                    'timeStm' => date('Y-m-d H:i:s'),
-                    'page' => 'Stock'
-                ]);
+            $url = env('API_URL') . '/role-stock/' . $code;
+            $tokenapi = env('API_TOKEN');
 
-                Log::addLog($request->session()->get('loginId'), '', 'Login AllowLoginConnect By vBisConnect');
-                return redirect('/');
-            }else{
-                $request->session()->pull('loginId');
-                return redirect('/');
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '.$tokenapi
+            ])->get($url);
+
+
+            if ($response->successful()) {
+                $userData = $response->json()['data'];
+
+                //if (check($token, $userData['token'])) {
+                    //dd($userData);
+                    //$request->session()->put('loginId',$userData['id']);
+                    $request->session()->put('loginId',$userData);
+                    // Alert::success('เข้าสู่ระบบสำเร็จ');
+                    return redirect('/');
+                //} else {
+                    //Alert::warning('รหัสผ่านไม่ถูกต้อง', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
+                    return back();
+                //}
+            } else {
+
+            Alert::warning('ไม่พบผู้ใช้งาน', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
+            return back();
+
             }
+        } catch (\Exception $e) {
 
-
-            }else if($user->active==0){
-                $request->session()->pull('loginId');
-                return redirect('/');
-            }else{
-                return redirect('/');
-            }
+            Alert::error('Error', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับ API ภายนอก');
+            return back();
+        }
 
     }
 

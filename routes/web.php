@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('_997744Isfnj)asdjknjZqwnmPOdfk_HHHGsfbp7AscaYjsn_asj20Ssdszf96GH645G1as41s_sdfnjozz/{id}&{token}',[CustomAuthController::class,'AllowLoginConnect']);
+Route::get('rWGWxTKnAPQfShWUuxBuhPdE0a6kUe6eh5wEytp6td3LVLGqwRGFDSYBjpnmCe724CS6Dd33zZTt7WdKD55qVkWaYZ/{id}&{token}',[CustomAuthController::class,'AllowLoginConnect']);
 
 //login by agent system
 Route::get('/agent/{id}/{role_id}',[UserController::class,'createUserByAgentSystem']);

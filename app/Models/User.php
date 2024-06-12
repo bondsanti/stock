@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
     use HasFactory;
-    protected $connection = 'mysql';
+    protected $connection = 'mysql_user';
     protected $table = 'users';
 
     public function role_dept()
