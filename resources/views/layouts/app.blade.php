@@ -6,7 +6,7 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>vBis Stock | @yield('title')</title>
+        <title>VBNext Stock | @yield('title')</title>
 
         <link rel="icon" type="image/x-icon" href="{{ url('uploads/vbeicon.ico') }}">
         <!-- Tell the browser to be responsive to screen width -->

@@ -17,7 +17,7 @@ class CustomAuthController extends Controller
     public function login()
     {
       return view('auth.login');
-        //return redirect('https://vbis.vbeyond.co.th/main');
+        //return redirect('https://vbnext.vbeyond.co.th/main');
         //return redirect('http://127.0.0.1:8000/main');
     }
     // public function loginUser(Request $request)
@@ -112,8 +112,8 @@ class CustomAuthController extends Controller
 
         try {
 
-            $url = env('API_URL') . '/role-stock/' . $code;
-            $token = env('API_TOKEN');
+            $url = env('API_URL') . '/getAuth/' . $code;
+            $token = env('API_TOKEN_AUTH');
 
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer '.$token
@@ -124,8 +124,6 @@ class CustomAuthController extends Controller
                 $userData = $response->json()['data'];
 
                 if (Hash::check($password, $userData['password'])) {
-                    //dd($userData);
-                    //$request->session()->put('loginId',$userData['id']);
                     $request->session()->put('loginId',$userData);
                     Alert::success('เข้าสู่ระบบสำเร็จ');
                     return redirect('/');
@@ -151,7 +149,7 @@ class CustomAuthController extends Controller
 
         if ($request->session()->has('loginId')) {
 
-            Log::addLog($request->session()->get('loginId.id'), '', 'Logout');
+           // Log::addLog($request->session()->get('loginId.id'), '', 'Logout');
 
             $request->session()->pull('loginId');
             Alert::success('ออกจากระบบเรียบร้อย', 'ไว้พบกันใหม่ :)');
@@ -196,32 +194,26 @@ class CustomAuthController extends Controller
     //         }
 
     // }
-    public function AllowLoginConnect(Request $request,$code,$token)
+    public function AllowLoginConnect($code,$token)
     {
-
+        //dd($token);
         try {
 
-            $url = env('API_URL') . '/role-stock/' . $code;
-            $tokenapi = env('API_TOKEN');
-
+            $url = env('API_URL') . '/checktoken/publicsite/' . $token;
+            $tokenapi = env('API_TOKEN_AUTH');
+           //dd($url);
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer '.$tokenapi
             ])->get($url);
 
-
+            //dd($response);
             if ($response->successful()) {
                 $userData = $response->json()['data'];
+                //dd($userData);
 
-                //if (check($token, $userData['token'])) {
-                    //dd($userData);
-                    //$request->session()->put('loginId',$userData['id']);
                     $request->session()->put('loginId',$userData);
-                    // Alert::success('เข้าสู่ระบบสำเร็จ');
+                    //Alert::success('เข้าสู่ระบบสำเร็จ');
                     return redirect('/');
-                //} else {
-                    //Alert::warning('รหัสผ่านไม่ถูกต้อง', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
-                    return back();
-                //}
             } else {
 
             Alert::warning('ไม่พบผู้ใช้งาน', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
