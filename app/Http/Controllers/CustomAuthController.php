@@ -118,7 +118,7 @@ class CustomAuthController extends Controller
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer '.$token
             ])->get($url);
-                dd($url);
+                //dd($response);
 
             if ($response->successful()) {
                 $userData = $response->json()['data'];

@@ -21,7 +21,7 @@ class MainController extends Controller
         $dataLoginUser = Session::get('loginId');
         // dd($dataLoginUser['email']);
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId')['id'])->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
         //ทั้งหมด
