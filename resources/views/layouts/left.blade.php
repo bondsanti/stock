@@ -4,7 +4,7 @@
       <a href="{{ route('main') }}" class="brand-link">
           @if ($isRole->role_type == 'Partner')
               <img src="{{ $isRole->logo }}"class="brand-image">
-              <span class="brand-text text-center"> STOCK PROJECT </span>
+              <span class="brand-text text-center"> VBEYOND STOCK </span>
           @else
               <img src="{{ url('uploads/logo.png') }}" alt="vbeyond" class="brand-image elevation-0" style="opacity: .8">
               <span class="brand-text text-center"> VBEYOND STOCK</span>
@@ -19,7 +19,7 @@
           <div class="user-panel mt-3 pb-3 mb-3 d-flex">
               <div class="image">
 
-                  <img src="{{ url('uploads/avatar.png') }}" class="img-circle elevation-2" alt="User Image">
+                  <img src="{{ $dataLoginUser['fileExists'] ? $dataLoginUser['remoteFile'] : url('uploads/avatar.png') }}" class="img-circle elevation-2" alt="User Image">
 
               </div>
               <div class="info">
