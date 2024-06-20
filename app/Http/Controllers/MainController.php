@@ -20,7 +20,7 @@ class MainController extends Controller
 
         $dataLoginUser = Session::get('loginId');
         // dd($dataLoginUser['apiData']['data']['name_th']);
-        
+        dd($dataLoginUser);
         //permission sub by dept
         $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
