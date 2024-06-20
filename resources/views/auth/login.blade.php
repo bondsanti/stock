@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>vBis | Stock</title>
+    <title>VBNext | Stock โครงการ</title>
     <link rel="icon" type="image/x-icon" href="{{ url('uploads/vbeicon.ico') }}">
 
     <link rel="stylesheet"
@@ -35,7 +35,7 @@
 
         <div class="card">
             <div class="card-body login-card-body">
-                <h2 class="text-center">vBis Stock</h2>
+                <h2 class="text-center">Stock โครงการ</h2>
                 <form action="{{route('loginUser')}}" id="loginForm" method="post">
                     @csrf
                     <div class="input-group mb-3">
