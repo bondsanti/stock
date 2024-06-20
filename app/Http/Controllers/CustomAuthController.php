@@ -20,82 +20,6 @@ class CustomAuthController extends Controller
         //return redirect('https://vbnext.vbeyond.co.th/main');
         //return redirect('http://127.0.0.1:8000/main');
     }
-    // public function loginUser(Request $request)
-    // {
-
-    //     $request->validate([
-    //         'code' => 'required',
-    //         'password' => 'required'
-    //     ], [
-    //         'code.required' => 'ป้อนรหัสพนักงาน',
-    //         'password.required' => 'ป้อนรหัสผ่าน'
-    //     ]);
-
-
-    //     $user_hr = User::where('code', $request->code)->orWhere('old_code', $request->code)->where('active',1)->first();
-
-
-    //     if (!$user_hr) {
-    //         Alert::error('ไม่พบผู้ใช้งาน', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
-    //         return back();
-    //     } else {
-
-    //         if ($user_hr->active != 0 or $user_hr->resign_date == null) {
-
-    //             $role_user = Role_user::where('user_id', $user_hr->id)->orwhere('active',1)->first();
-
-    //             if (!$role_user) {
-
-    //                 Alert::warning('คุณไม่มีสิทธิ์เข้าระบบ', 'กรุณาติดต่อ Admin!!');
-    //                 return back();
-
-    //             } else {
-
-    //                 if (Hash::check($request->password, $user_hr->password)) {
-
-    //                     if ($user_hr->is_auth == 0) {
-
-    //                         $request->session()->put('dataIsAuth', $user_hr);
-    //                         Alert::info('กรุณาเปลี่ยนรหัสผ่าน');
-    //                         return redirect('/change-password');
-    //                     }
-
-    //                     $request->session()->put('loginId', $user_hr->id);
-
-    //                     DB::table('vbeyond_report.log_login')->insert([
-    //                         'username' => $user_hr->code,
-    //                         'dates' => date('Y-m-d'),
-    //                         'timeStm' => date('Y-m-d H:i:s'),
-    //                         'page' => 'Stock'
-    //                     ]);
-
-    //                     Log::addLog($request->session()->get('loginId'), '', 'Login');
-
-
-    //                         Alert::success('เข้าสู่ระบบสำเร็จ');
-    //                         return redirect('/');
-
-
-
-
-    //                 } else {
-
-    //                     Alert::warning('รหัสผ่านไม่ถูกต้อง', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
-    //                     return back();
-    //                 }
-
-
-    //                 Alert::warning('รหัสผ่านไม่ถูกต้อง', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
-    //                 return back();
-    //             }
-
-    //         } else {
-    //             Alert::error('ไม่พบผู้ใช้งาน', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
-    //             return back();
-    //         }
-    //     }
-    // }
-
 
     public function loginUser(Request $request)
     {
@@ -158,48 +82,12 @@ class CustomAuthController extends Controller
         }
     }
 
-    // public function AllowLoginConnect(Request $request,$id,$token)
-    // {
-
-    //     $user = User::where('code', '=', $id)->orWhere('old_code', '=', $id)->first();
-    //     //dd($user);
-    //     if($user){
-    //         $request->session()->put('loginId',$user->id);
-    //         // Auth::login($user);
-    //         $user->last_login_at = date('Y-m-d H:i:s');
-    //         $user->save();
-    //         $checkToken = User::where('token', '=', $token)->first();
-
-    //         if ($checkToken) {
-    //             DB::table('vbeyond_report.log_login')->insert([
-    //                 'username' => $user->code,
-    //                 'dates' => date('Y-m-d'),
-    //                 'timeStm' => date('Y-m-d H:i:s'),
-    //                 'page' => 'Stock'
-    //             ]);
-
-    //             Log::addLog($request->session()->get('loginId'), '', 'Login AllowLoginConnect By vBisConnect');
-    //             return redirect('/');
-    //         }else{
-    //             $request->session()->pull('loginId');
-    //             return redirect('/');
-    //         }
-
-
-    //         }else if($user->active==0){
-    //             $request->session()->pull('loginId');
-    //             return redirect('/');
-    //         }else{
-    //             return redirect('/');
-    //         }
-
-    // }
-    public function AllowLoginConnect($code,$token)
+    public function AllowLoginConnect(Request $request,$code,$token)
     {
         //dd($token);
         try {
 
-            $url = env('API_URL') . '/checktoken/publicsite/' . $token;
+            $url = env('API_URL') . '/checktoken/out/' . $token;
             $tokenapi = env('API_TOKEN_AUTH');
            //dd($url);
             $response = Http::withHeaders([
@@ -209,11 +97,11 @@ class CustomAuthController extends Controller
             //dd($response);
             if ($response->successful()) {
                 $userData = $response->json()['data'];
-                //dd($userData);
 
                     $request->session()->put('loginId',$userData);
-                    //Alert::success('เข้าสู่ระบบสำเร็จ');
+                    Alert::success('เข้าสู่ระบบสำเร็จ');
                     return redirect('/');
+
             } else {
 
             Alert::warning('ไม่พบผู้ใช้งาน', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');

@@ -113,8 +113,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>รหัสพนักงาน</th>
-                                        <th>ชื่อ-สกุล</th>
-                                        <th>Role id Ref Position</th>
+                                        <th>อีเมล์</th>
+                                       {{-- <th>Role id Ref Position</th> --}}
                                         <th>Dept</th>
                                         <th>ประเภทผู้ใช้งาน</th>
                                         <th class="text-center">Action</th>
@@ -122,38 +122,50 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($users as $user)
-                                        @if ($user->role->active == '1')
-                                            <tr>
-                                                <td width="5%">{{ $loop->index + 1 }}</td>
-                                                <td>{{ $user->role->code }}</td>
+                                        {{-- @if ($user->role->active == '1') --}}
+                                        <tr>
+                                            <td width="5%">{{ $loop->index + 1 }}</td>
+                                            <td>
+                                                @if ($user->api_data)
+                                                    {{ $user->api_data['code'] }}
+                                                @else
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($user->api_data)
+                                                    {{ $user->api_data['email'] }}
+                                                @else
+                                                @endif
+                                            </td>
+                                            {{-- <td>{{ $user->role->code }}</td>
                                                 <td>{{ $user->role->name_th }}</td>
-                                                <td width="30%">{{ optional($user->position)->name }}</td>
-                                                <td>{{ $user->dept }}</td>
-                                                <td>
+                                                <td width="30%">{{ optional($user->position)->name }}</td> --}}
+                                            <td>{{ $user->dept }}</td>
+                                            <td>
 
-                                                    {{ $user->role_type }}
+                                                {{ $user->role_type }}
 
 
-                                                </td>
+                                            </td>
 
-                                                {{-- <td>{{ $user->active == '0' ? 'Disable' : 'Enable' }}</td> --}}
-                                                <td width="15%" class="text-center">
-                                                    @if (Session::get('loginId') != $user->user_id)
-                                                        <button class="btn bg-gradient-info btn-sm edit-item"
-                                                            data-id="{{ $user->id }}" title="แก้ไข">
-                                                            <i class="fa fa-pencil-square">
-                                                            </i>
+                                            {{-- <td>{{ $user->active == '0' ? 'Disable' : 'Enable' }}</td> --}}
+                                            <td width="15%" class="text-center">
+                                                @if ($dataLoginUser['user_id'] != $user->user_id)
+                                                    <button class="btn bg-gradient-info btn-sm edit-item"
+                                                        data-id="{{ $user->id }}" title="แก้ไข">
+                                                        <i class="fa fa-pencil-square">
+                                                        </i>
 
-                                                        </button>
-                                                        <button class="btn bg-gradient-danger btn-sm delete-item"
-                                                            data-id="{{ $user->id }}" title="ลบ">
-                                                            <i class="fa fa-trash">
-                                                            </i>
-                                                        </button>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endif
+                                                    </button>
+                                                    <button class="btn bg-gradient-danger btn-sm delete-item"
+                                                        data-id="{{ $user->id }}" title="ลบ">
+                                                        <i class="fa fa-trash">
+                                                        </i>
+                                                    </button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        {{-- @endif --}}
                                     @endforeach
                                 </tbody>
                             </table>
@@ -175,7 +187,7 @@
                         </div>
                         <form id="createForm" name="createForm" class="form-horizontal" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" name="user_id" id="user_id" value="{{ $dataLoginUser->id }}">
+                            <input type="hidden" name="user_id" id="user_id" value="{{ $dataLoginUser['user_id'] }}">
                             <div class="modal-body">
                                 <div class="box-body">
                                     <div class="form-group">
@@ -260,7 +272,8 @@
                         </div>
                         <form id="editForm" name="editForm" class="form-horizontal" enctype="multipart/form-data">
                             <input type="hidden" name="id_edit" id="id_edit">
-                            <input type="hidden" name="user_id" id="user_id" value="{{ $dataLoginUser->id }}">
+                            <input type="hidden" name="user_id" id="user_id"
+                                value="{{ $dataLoginUser['user_id'] }}">
                             @csrf
                             <div class="modal-body">
                                 <div class="box-body">
@@ -376,9 +389,11 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form id="createFormPartner" name="createFormPartner" class="form-horizontal" enctype="multipart/form-data">
+                        <form id="createFormPartner" name="createFormPartner" class="form-horizontal"
+                            enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" name="user_id" id="user_id" value="{{ $dataLoginUser->id }}">
+                            <input type="hidden" name="user_id" id="user_id"
+                                value="{{ $dataLoginUser['user_id'] }}">
                             <div class="modal-body">
                                 <div class="box-body">
                                     <div class="form-group">
@@ -401,10 +416,11 @@
 
                                     <div class="form-group" id="">
                                         <div class="col-md-12">
-                                            <label for="inputEmail3" class="col-form-label">ระบุชื่อ Partner <sup>*เพื่อนำไป Filter</sup></label>
+                                            <label for="inputEmail3" class="col-form-label">ระบุชื่อ Partner
+                                                <sup>*เพื่อนำไป Filter</sup></label>
                                             <input type="text" class="col-md-12 form-control" id="deptRole"
                                                 name="deptRole" placeholder="" autocomplete="off">
-                                                <p class="text-danger mt-1 deptRole_err"></p>
+                                            <p class="text-danger mt-1 deptRole_err"></p>
                                         </div>
                                     </div>
                                     <div class="form-group" id="">
@@ -420,8 +436,8 @@
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn bg-gradient-danger" data-dismiss="modal"><i
                                         class="fa fa-times"></i> ยกเลิก</button>
-                                <button type="button" class="btn bg-gradient-success" id="savedata_partner" value="create"><i
-                                        class="fa fa-save"></i> บันทึก</button>
+                                <button type="button" class="btn bg-gradient-success" id="savedata_partner"
+                                    value="create"><i class="fa fa-save"></i> บันทึก</button>
                             </div>
 
                         </form>
@@ -509,7 +525,7 @@
                 "responsive": true
             });
 
-            const user_id = {{ $dataLoginUser->id }};
+            const user_id = {{ $dataLoginUser['user_id'] }};
             $('#Create').click(function() {
                 $('#savedata').val("create");
                 $('#createForm').trigger("reset");
@@ -609,10 +625,10 @@
                 //console.log(id);
                 $('#modal-edit').modal('show');
                 $.get('api/user/edit/' + id, function(data) {
-                    //console.log(data.logo);
+                    console.log(data);
                     $('#id_edit').val(data.id);
-                    $('#code_edit').val(data.role.code);
-                    $('#name_edit').val(data.role.name_th);
+                    $('#code_edit').val(data.api_data.code);
+                    $('#name_edit').val(data.api_data.email);
                     // $('#dept_edit').val(data.dept);
                     $('#dept_edit2').val(data.dept);
                     $('#logo_img').attr('src', data.logo);

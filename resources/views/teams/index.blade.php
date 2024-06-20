@@ -122,7 +122,7 @@
                                         class="fa fa-save"></i> บันทึก</button>
                             </div>
                             <input type="hidden" class="form-control" id="user_id" name="user_id" placeholder=""
-                                autocomplete="off" value="{{ $dataLoginUser->id }}">
+                                autocomplete="off" value="{{ $dataLoginUser['user_id'] }}">
                         </form>
                     </div>
                     <!-- /.modal-content -->
@@ -169,7 +169,7 @@
                                         class="fa fa-save"></i> อัพเดท</button>
                             </div>
                             <input type="hidden" class="form-control" id="user_id" name="user_id" placeholder=""
-                                autocomplete="off" value="{{ $dataLoginUser->id }}">
+                                autocomplete="off" value="{{ $dataLoginUser['user_id'] }}">
 
                                 <input type="hidden" class="form-control" id="id_edit" name="id_edit" placeholder=""
                                 autocomplete="off" value="">
@@ -217,7 +217,7 @@
             //     $('#table').DataTable().button('.buttons-excel').trigger();
             // });
 
-            const user_id = {{ $dataLoginUser->id }};
+            const user_id = {{ $dataLoginUser['user_id'] }};
 
             //Create modal
             $('#Create').click(function() {

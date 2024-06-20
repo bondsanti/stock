@@ -15,13 +15,15 @@ class RentralController extends Controller
 
 public function index()
 {
-    $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-    $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
-    $projects = DB::connection('mysql_report')
-    ->table('project')
-    ->where('rent', 1)
-    ->orderBy('Project_Name', 'asc')
-    ->get();
+    $dataLoginUser = Session::get('loginId');
+    //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+    $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
+    $projects=[];
+    // $projects = DB::connection('mysql_report')
+    // ->table('project')
+    // ->where('rent', 1)
+    // ->orderBy('Project_Name', 'asc')
+    // ->get();
 
     // $status = DB::connection('mysql_report')
     // ->table('rental_room')

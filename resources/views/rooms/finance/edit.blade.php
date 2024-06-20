@@ -5,7 +5,7 @@
 @section('content')
 <form id="editForm" name="editForm"  method="post" action="{{route('room.update')}}">
     @csrf
-    <input type="hidden" name="user_id" value="{{$dataLoginUser->id}}">
+    <input type="hidden" name="user_id" value="{{$dataLoginUser['user_id']}}">
     <input type="hidden" name="room_id" value="{{$rooms->id}}">
     <div class="content-header">
         <div class="container-fluid">
@@ -423,7 +423,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var user_id = {{ $dataLoginUser->id }};
+            var user_id = {{ $dataLoginUser['user_id'] }};
             var rooms_id = {{ $rooms->id }};
 
              //ยกเลิกการจอง

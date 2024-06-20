@@ -19,7 +19,8 @@ class MainController extends Controller
         // $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
 
         $dataLoginUser = Session::get('loginId');
-        // dd($dataLoginUser['email']);
+        // dd($dataLoginUser['apiData']['data']['name_th']);
+        
         //permission sub by dept
         $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);

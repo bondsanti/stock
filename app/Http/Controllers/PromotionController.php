@@ -18,12 +18,12 @@ class PromotionController extends Controller
 {
     public function index(Request $request)
     {
-
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
         //dd($dataLoginUser);
         //permission sub by dept
 
-        $isRole = Role_user::where('user_id', $dataLoginUser->id)->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
         $promotions = Promotion::leftJoin('projects', 'projects.id', '=', 'promotions.project_id')

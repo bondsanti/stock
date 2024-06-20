@@ -16,11 +16,11 @@ class FurnitureController extends Controller
     public function index(Request $request)
     {
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        // $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
         // dd($dataLoginUser);
-
+        $dataLoginUser = Session::get('loginId');
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
         $furnitures = Furniture::orderBy('id', 'asc')->get();
 

@@ -24,11 +24,12 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-        // dd($dataLoginUser);
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+
+        $dataLoginUser = Session::get('loginId');
 
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
         if($isRole->role_type == 'Partner' || $isRole->role_type =='User' || $isRole->role_type =='Sale')
@@ -210,10 +211,10 @@ class ProjectController extends Controller
 
     public function detail($id)
     {
-
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         $project = Project::where('id', $id)->first();
         $plans = Plan::where('project_id', $id)->get();
         $floors = Floor::where('project_id', $id)->get();
@@ -233,9 +234,10 @@ class ProjectController extends Controller
 
     public function edit($id)
     {
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        // $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         $project = Project::where('id', $id)->first();
         $contracts = Contract::where('project_id',$id)->get();
 

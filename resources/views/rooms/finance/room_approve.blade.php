@@ -142,7 +142,7 @@
 
     <script>
         $(document).ready(function() {
-            const user_id = {{ $dataLoginUser->id }};
+            const user_id = {{ $dataLoginUser['user_id'] }};
             //ลบการจอง
             $('body').on('click', '.delete-item', function() {
                 const id = $(this).data("id");

@@ -14,7 +14,6 @@ use App\Models\Promotion;
 use App\Models\Role_user;
 use App\Models\Status_Room;
 use App\Models\User;
-use Complex\Functions;
 use Session;
 use DataTables;
 use Illuminate\Http\Request;
@@ -30,11 +29,12 @@ class RoomController extends Controller
     public function index(Request $request)
     {
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
         // dd($dataLoginUser);
 
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
 
@@ -77,8 +77,8 @@ class RoomController extends Controller
 
         $message = "";
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId')['user_id'])->first();
+        $isRole = Role_user::where('user_id',Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
         $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
@@ -102,6 +102,7 @@ class RoomController extends Controller
 
         $projects = Project::orderBy('name', 'asc')->where('active', 1)->get();
 
+        //API CUSOMTER
         $customers = DB::connection('mysql_report')->table('product')
             ->select('pid', DB::raw('CONCAT(name, " ", bank) as name'), 'bank')
             ->get();
@@ -140,8 +141,9 @@ class RoomController extends Controller
 
         $message = "";
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
         $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
@@ -199,9 +201,9 @@ class RoomController extends Controller
     {
 
         $message = "";
-
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
+        // $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
         $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
@@ -503,11 +505,12 @@ class RoomController extends Controller
 
     public function search(Request $request)
     {
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
         // dd($dataLoginUser);
+        $dataLoginUser = Session::get('loginId');
 
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
         $projects = Project::orderBy('name', 'asc')->where('active', 1)->get();
@@ -521,7 +524,11 @@ class RoomController extends Controller
         $status = $query->get();
 
 
-        $rooms = Room::with(['project', 'plan', 'user', 'status', 'booking'])
+        // $rooms = Room::with(['project', 'plan', 'user', 'status', 'booking'])
+        //     ->whereHas('project', function ($query) {
+        //         $query->where('active', 1);
+        //     });
+            $rooms = Room::with(['project', 'plan', 'status', 'booking'])
             ->whereHas('project', function ($query) {
                 $query->where('active', 1);
             });
@@ -530,15 +537,15 @@ class RoomController extends Controller
             $rooms->where('project_id', $request->project_id);
         }
 
-        if ($request->user_name) {
-            $rooms->where(function ($query) use ($request) {
-                $query->where('owner', 'LIKE', '%' . $request->user_name . '%')
-                    ->orWhereHas('booking', function ($subQuery) use ($request) {
-                        $subQuery->where('customer_fname', 'LIKE', '%' . $request->user_name . '%')
-                            ->orWhere('customer_sname', 'LIKE', '%' . $request->user_name . '%');
-                    });
-            });
-        }
+        // if ($request->user_name) {
+        //     $rooms->where(function ($query) use ($request) {
+        //         $query->where('owner', 'LIKE', '%' . $request->user_name . '%')
+        //             ->orWhereHas('booking', function ($subQuery) use ($request) {
+        //                 $subQuery->where('customer_fname', 'LIKE', '%' . $request->user_name . '%')
+        //                     ->orWhere('customer_sname', 'LIKE', '%' . $request->user_name . '%');
+        //             });
+        //     });
+        // }
 
         if ($request->room_address) {
             $rooms->where('room_address', 'LIKE', '%' . $request->room_address . '%');
@@ -642,11 +649,12 @@ class RoomController extends Controller
 
     public function searchPartner(Request $request)
     {
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
         // dd($dataLoginUser);
+        $dataLoginUser = Session::get('loginId');
 
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
 
@@ -785,7 +793,7 @@ class RoomController extends Controller
                 if ($roomsID && $roomsID->status_id === 0) {
                     // ส่งอีเมล์ได้
                     $project = Project::where('id', '=', $roomsID->project_id)->first();
-                    $url = "https://property.vbeyond.co.th";
+                    $url = "http://vbstock.vbeyond.co.th";
                     // $toEmail = ['santi.c@vbeyond.co.th'];
                     // $toCC = ['sirawich.t@vbeyond.co.th'];
                     // $toEmail = ['santi.c@vbeyond.co.th'];
@@ -858,8 +866,9 @@ class RoomController extends Controller
 
     public function deleteSelected(Request $request)
     {
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-        $user_id = $dataLoginUser->id;
+        $dataLoginUser = Session::get('loginId');
+        // $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $user_id = $dataLoginUser['user_id'];
         $selectedRooms = $request->input('selected_rooms', []);
 
 
@@ -884,8 +893,9 @@ class RoomController extends Controller
 
     public function cancelSelected(Request $request)
     {
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-        $user_id = $dataLoginUser->id;
+        $dataLoginUser = Session::get('loginId');
+        //dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $user_id = $dataLoginUser['user_id'];
         $selectedRooms = $request->input('selected_rooms', []);
 
 
@@ -1265,11 +1275,12 @@ class RoomController extends Controller
 
     public function approve(Request $request)
     {
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
         // dd($dataLoginUser);
+        $dataLoginUser = Session::get('loginId');
 
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
         //$projects = Project::orderBy('name', 'asc')->where('active', 1)->get();
 
@@ -1287,7 +1298,8 @@ class RoomController extends Controller
             ->values();
 
 
-        $rooms = Room::with(['project', 'plan', 'user', 'status', 'booking'])->where('status_id', 0);
+       // $rooms = Room::with(['project', 'plan', 'user', 'status', 'booking'])->where('status_id', 0);
+        $rooms = Room::with(['project', 'plan','status', 'booking'])->where('status_id', 0);
 
         // dd($rooms);
         $rooms = $rooms->orderBy('room_address', 'asc')->get();
@@ -1307,8 +1319,9 @@ class RoomController extends Controller
     }
     public function update_approve(Request $request)
     {
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-        $user_id = $dataLoginUser->id;
+        $dataLoginUser = Session::get('loginId');
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $user_id = $dataLoginUser['user_id'];
         $selectedApprove = $request->input('selected_rooms', []);
 
 
@@ -1344,24 +1357,28 @@ class RoomController extends Controller
 
     public function searchApprove(Request $request)
     {
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
         // dd($dataLoginUser);
-
+        $dataLoginUser = Session::get('loginId');
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id',Session::get('loginId')['user_id'])->first();
         //dd($isRole);
         $projects = Room::with('project')
             ->where('status_id', 0)
             ->get()
             ->groupBy('project_id')
             ->map(function ($item) {
-                return $item->first()->project->only(['id', 'name']);
+                // Check if the project is not null before calling the only method
+                if ($item->first()->project !== null) {
+                    return $item->first()->project->only(['id', 'name']);
+                }
             })
+            ->filter() // This will remove any null values from the map
             ->values();
         // $rooms = Room::with(['project', 'plan', 'user', 'status', 'booking'])->where('status_id', 0);
 
-        $rooms = Room::with(['project', 'plan', 'user', 'status', 'booking'])->where('project_id', $request->project_id)->where('status_id', 0);
-
+        //$rooms = Room::with(['project', 'plan', 'user', 'status', 'booking'])->where('project_id', $request->project_id)->where('status_id', 0);
+        $rooms = Room::with(['project', 'plan', 'status', 'booking'])->where('project_id', $request->project_id)->where('status_id', 0);
         // dd($rooms);
         $rooms = $rooms->orderBy('room_address', 'asc')->get();
         $roomsCount = $rooms->count();

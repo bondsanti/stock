@@ -25,8 +25,9 @@ class BookingController extends Controller
 
     public function getRoom($id)
     {
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
         $status = Status_Room::orderBy('id', 'desc')->whereIn('name', ['จองแล้ว', 'ทำสัญญา', 'โอน', 'ออกใบเสนอราคา'])->get();
         $sutatusBid =  Status_Room::orderBy('id', 'desc')->whereIn('name', ['จองแล้ว', 'ออกใบเสนอราคา', 'ทำสัญญา'])->get();

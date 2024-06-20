@@ -296,7 +296,7 @@
             // });
 
 
-            const user_id = {{ $dataLoginUser['id'] }};
+            const user_id = {{ $dataLoginUser['user_id'] }};
             //ยกเลิกการจอง
             $('body').on('click', '.data-cancel', function() {
                 const id = $(this).data("id");
@@ -318,7 +318,6 @@
                             type: "POST",
                             url: '/api/rooms/booking/cancel/' + id + '/' + user_id + '/' +
                                 roomId,
-                            //url: '/api/room/cancel/' + id + '/' + user_id,
                             success: function(data) {
 
                                 Swal.fire({

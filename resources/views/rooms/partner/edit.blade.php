@@ -5,7 +5,7 @@
 @section('content')
 <form id="editForm" name="editForm"  method="post" action="{{route('room.update.partner')}}">
     @csrf
-    <input type="hidden" name="user_id" value="{{$dataLoginUser->id}}">
+    <input type="hidden" name="user_id" value="{{$dataLoginUser['user_id']}}">
     <input type="hidden" name="room_id" value="{{$rooms->id}}">
     <div class="content-header">
         <div class="container-fluid">

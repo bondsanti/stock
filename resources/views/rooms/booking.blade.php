@@ -555,7 +555,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            const user_id = {{ $dataLoginUser->id }};
+            const user_id = {{ $dataLoginUser['user_id'] }};
             const rooms_id = {{ $rooms->id }};
 
             //ลบการจอง

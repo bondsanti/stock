@@ -86,7 +86,7 @@
                                         enctype="multipart/form-data" class="form-horizontal">
                                         @csrf
                                         <input type="hidden" name="project_id" value="{{ $project->id }}">
-                                        <input type="hidden" name="user_id" value="{{ $dataLoginUser->id }}">
+                                        <input type="hidden" name="user_id" value="{{ $dataLoginUser['user_id'] }}">
                                         <div class="row">
                                             <div class="card-body">
                                                 <div class="form-group row justify-content-center">
@@ -273,7 +273,7 @@
                                                                 <input type="hidden" value="{{ $floor->id }}"
                                                                     name="floor_id">
                                                                 <input type="hidden" name="user_id" id="user_id"
-                                                                    value="{{ $dataLoginUser->id }}">
+                                                                    value="{{ $dataLoginUser['user_id'] }}">
                                                                 <div class="card card-info">
                                                                     <div class="card-header">
                                                                         <h4 class="card-title w-100">
@@ -418,7 +418,7 @@
                                                                     <input type="hidden" value="{{ $floor->id }}"
                                                                         name="floor_id">
                                                                     <input type="hidden"
-                                                                        value="{{ $dataLoginUser->id }}" name="user_id">
+                                                                        value="{{ $dataLoginUser['user_id'] }}" name="user_id">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
                                                                             <h5 class="modal-title"
@@ -479,7 +479,7 @@
                                                                 <input type="hidden" value="{{ $plan->id }}"
                                                                     name="plan_id">
                                                                 <input type="hidden" name="user_id" id="user_id"
-                                                                    value="{{ $dataLoginUser->id }}">
+                                                                    value="{{ $dataLoginUser['user_id'] }}">
                                                                 <div class="card card-info">
                                                                     <div class="card-header">
                                                                         <h4 class="card-title w-100">
@@ -664,7 +664,7 @@
                                                                     <input type="hidden" value="{{ $plan->id }}"
                                                                         name="plan_id">
                                                                     <input type="hidden"
-                                                                        value="{{ $dataLoginUser->id }}" name="user_id">
+                                                                        value="{{ $dataLoginUser['user_id'] }}" name="user_id">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
                                                                             <h5 class="modal-title"
@@ -1094,7 +1094,7 @@
                                             บันทึก</button>
 
                                         <input type="hidden" name="user_id" id="user_id"
-                                            value="{{ $dataLoginUser->id }}">
+                                            value="{{ $dataLoginUser['user_id'] }}">
                                         <input type="hidden" name="project_id" id="project_id"
                                             value="{{ $project->id }}">
 
@@ -1207,7 +1207,7 @@
                                         บันทึก</button>
 
                                     <input type="hidden" name="user_id" id="user_id"
-                                        value="{{ $dataLoginUser->id }}">
+                                        value="{{ $dataLoginUser['user_id'] }}">
                                     <input type="hidden" name="project_id" id="project_id"
                                         value="{{ $project->id }}">
 
@@ -1290,7 +1290,7 @@
                                         บันทึก</button>
 
                                     <input type="hidden" name="user_id" id="user_id"
-                                        value="{{ $dataLoginUser->id }}">
+                                        value="{{ $dataLoginUser['user_id'] }}">
                                     <input type="hidden" name="project_id" id="project_id"
                                         value="{{ $project->id }}">
 
@@ -1387,7 +1387,7 @@
                                             บันทึก</button>
 
                                         <input type="hidden" name="user_id" id="user_id"
-                                            value="{{ $dataLoginUser->id }}">
+                                            value="{{ $dataLoginUser['user_id'] }}">
                                         <input type="hidden" name="project_id" id="project_id"
                                             value="{{ $project->id }}">
                                         <input type="hidden" class="form-control" id="id_edit" name="id_edit"
@@ -1542,7 +1542,7 @@
                                             บันทึก</button>
 
                                         <input type="hidden" name="user_id" id="user_id"
-                                            value="{{ $dataLoginUser->id }}">
+                                            value="{{ $dataLoginUser['user_id'] }}">
 
                                         <input type="hidden" class="form-control" id="p_id" name="p_id"
                                             placeholder="" autocomplete="off" value="">
@@ -1639,7 +1639,7 @@
                                             บันทึก</button>
 
                                         <input type="hidden" name="user_id" id="user_id"
-                                            value="{{ $dataLoginUser->id }}">
+                                            value="{{ $dataLoginUser['user_id'] }}">
                                         <input type="hidden" name="project_id" id="project_id"
                                             value="{{ $project->id }}">
 
@@ -1735,7 +1735,7 @@
                                             บันทึก</button>
 
                                         <input type="hidden" name="user_id" id="user_id"
-                                            value="{{ $dataLoginUser->id }}">
+                                            value="{{ $dataLoginUser['user_id'] }}">
                                         <input type="hidden" name="project_id" id="project_id"
                                             value="{{ $project->id }}">
                                         <input type="hidden" name="id_edit" id="id_edit" value="">
@@ -1817,7 +1817,7 @@
                 $('#end_date_edit').datepicker('setStartDate', selectedStartDatee);
             });
 
-            const user_id = {{ $dataLoginUser->id }};
+            const user_id = {{ $dataLoginUser['user_id'] }};
 
             $('#table').DataTable({
                 'paging': true,

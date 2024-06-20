@@ -11,28 +11,67 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
-        // dd($dataLoginUser);
+        // $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
+        //dd($dataLoginUser);
 
         //permission sub by dept
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
 
-        $countUser = Role_user::where('active',1)->count();
-        $countUserSPAdmin = Role_user::where('active',1)->where('role_type','SuperAdmin')->count();
-        $countUserAdmin = Role_user::where('active',1)->where('role_type','Admin')->count();
-        $countUserStaff = Role_user::where('active',1)->where('role_type','Staff')->count();
-        $countUserSale = Role_user::where('active',1)->where('role_type','Sale')->count();
-        $countUsers = Role_user::where('active',1)->where('role_type','User')->count();
-        $countUserPartner = Role_user::where('active',1)->where('role_type','Partner')->count();
+        $countUser = Role_user::where('active', 1)->count();
+        $countUserSPAdmin = Role_user::where('active', 1)->where('role_type', 'SuperAdmin')->count();
+        $countUserAdmin = Role_user::where('active', 1)->where('role_type', 'Admin')->count();
+        $countUserStaff = Role_user::where('active', 1)->where('role_type', 'Staff')->count();
+        $countUserSale = Role_user::where('active', 1)->where('role_type', 'Sale')->count();
+        $countUsers = Role_user::where('active', 1)->where('role_type', 'User')->count();
+        $countUserPartner = Role_user::where('active', 1)->where('role_type', 'Partner')->count();
 
-        $users = Role_user::with('role:id,code,name_th,active','position:id,name')->orderBy('id', 'desc')->get();
-        //dd($users);
-        if ($isRole->role_type=="SuperAdmin") {
+        // $users = Role_user::with('role:id,code,name_th,active','position:id,name')->orderBy('id', 'desc')->get();
+
+        $users = Role_user::orderBy('id', 'desc')->where('active',1)->get();
+        $userIds = $users->pluck('user_id')->toArray(); // ดึง user_id เป็น array
+
+
+        $userIdsString = implode(',', $userIds);
+
+        $apiUrl = env('API_URL');
+        $tokenapi = env('API_TOKEN_AUTH');
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $tokenapi
+        ])->get($apiUrl . '/get-role/users/' . $userIdsString);
+
+        if ($response->successful()) {
+            $apiData = collect($response->json()['data']);
+
+            // วนลูปเพิ่มข้อมูลที่ได้จาก API ใน users collection
+            foreach ($users as $user) {
+                $userApiData = $apiData->firstWhere('user_id', $user->user_id);
+                if ($userApiData) {
+                    $user->api_data = [
+                        'code' => $userApiData['code'],
+                        'email' => $userApiData['email']
+                    ];
+                } else {
+                    $user->api_data = null;
+                }
+            }
+        } else {
+            foreach ($users as $user) {
+                $user->api_data = null;
+            }
+        }
+
+        //return response()->json($users);
+
+        if ($isRole->role_type == "SuperAdmin") {
             return view('users.index', compact(
                 'dataLoginUser',
                 'users',
@@ -45,7 +84,7 @@ class UserController extends Controller
                 'countUsers',
                 'isRole'
             ));
-        }else{
+        } else {
             return redirect()->back();
         }
     }
@@ -61,30 +100,30 @@ class UserController extends Controller
 
         if ($validator->passes()) {
 
-            $userFound = User::where('code', $request->code)->where('active',1)->count();
-            if($userFound===0){
+            $userFound = User::where('code', $request->code)->where('active', 1)->count();
+            if ($userFound === 0) {
                 return response()->json([
                     'message' => 'รหัสผิด / ไม่พบผู้ใช้งาน / ลาออก'
-                ],400);
+                ], 400);
             }
-            $users = User::where('code',$request->code)->where('active',1)->first();
-            $exitUsers = Role_user::where('user_id',$users->id)->first();
-            if($exitUsers){
+            $users = User::where('code', $request->code)->where('active', 1)->first();
+            $exitUsers = Role_user::where('user_id', $users->id)->first();
+            if ($exitUsers) {
                 return response()->json([
                     'message' => 'มีผู้ใช้ท่านนี้อยู่ในระบบแล้ว'
-                ],400);
+                ], 400);
             }
 
 
-            if ($request->role_type=="User") {
+            if ($request->role_type == "User") {
                 if (empty($request->dept)) {
                     $dept = "";
-                }else{
+                } else {
                     $dept = $request->dept;
                 }
-            }elseif($request->role_type=="Partner"){
+            } elseif ($request->role_type == "Partner") {
                 $dept = $request->dept2;
-            }else{
+            } else {
                 $dept = "";
             }
 
@@ -99,7 +138,7 @@ class UserController extends Controller
             $roleUser->active = 1;
             $roleUser->save();
 
-            if($request->hasFile('logo')){
+            if ($request->hasFile('logo')) {
 
                 $image = $request->file('logo');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -112,19 +151,17 @@ class UserController extends Controller
 
             // $roleUser->refresh();
 
-            Log::addLog($request->user_id, '', 'Create RoleUser : '. $roleUser);
+            Log::addLog($request->user_id, '', 'Create RoleUser : ' . $roleUser);
 
             return response()->json([
                 'message' => 'เพิ่มข้อมูลสำเร็จ'
-            ],201);
-
+            ], 201);
         }
 
-        return response()->json(['error'=>$validator->errors()]);
-
+        return response()->json(['error' => $validator->errors()]);
     }
 
-    public function destroy($id,$user_id)
+    public function destroy($id, $user_id)
     {
 
 
@@ -146,39 +183,67 @@ class UserController extends Controller
             unlink($roleUser->logo);
         }
 
-        Log::addLog($user_id,json_encode($roleUser_old), 'Delete RoleUser : '.$roleUser);
+        Log::addLog($user_id, json_encode($roleUser_old), 'Delete RoleUser : ' . $roleUser);
         $roleUser->delete($id);
 
         return response()->json([
             'message' => 'ลบข้อมูลสำเร็จ'
         ], 201);
-
     }
 
     public function edit($id)
     {
 
-        $users = Role_user::with('role:id,code,name_th,active','position:id,name')->where('id', $id)->first();
-       // dd($users);
+        // $users = Role_user::with('role:id,code,name_th,active', 'position:id,name')->where('id', $id)->first();
+        $users = Role_user::where('id', $id)->first();
+
+        $apiUrl = env('API_URL');
+        $tokenapi = env('API_TOKEN_AUTH');
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $tokenapi
+        ])->get($apiUrl . '/get-role/users/' . $users->user_id);
+
+        if ($response->successful()) {
+            $apiData = collect($response->json()['data']);
+
+            // วนลูปเพิ่มข้อมูลที่ได้จาก API ใน users collection
+
+                $userApiData = $apiData->firstWhere('user_id', $users->user_id);
+                if ($userApiData) {
+                    $users->api_data = [
+                        'code' => $userApiData['code'],
+                        'email' => $userApiData['email']
+                    ];
+                } else {
+                    $users->api_data = null;
+                }
+
+        } else {
+
+                $users->api_data = null;
+
+        }
+        // dd($users);
         return response()->json($users, 200);
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
 
         $roleUser = Role_user::where('id', $id)->first();
         $roleUser_old = $roleUser->toArray();
 
 
-        if ($request->role_type_edit=="User") {
+        if ($request->role_type_edit == "User") {
             if (empty($request->dept_edit)) {
                 $dept = "";
-            }else{
+            } else {
                 $dept = $request->dept_edit;
             }
-        }elseif($request->role_type_edit=="Partner"){
+        } elseif ($request->role_type_edit == "Partner") {
             $dept = $request->dept_edit2;
-        }else{
+        } else {
             $dept = "";
         }
 
@@ -195,7 +260,7 @@ class UserController extends Controller
 
 
 
-        if($request->hasFile('logo_edit')){
+        if ($request->hasFile('logo_edit')) {
 
             if (file_exists($roleUser->logo)) {
                 unlink($roleUser->logo);
@@ -210,12 +275,11 @@ class UserController extends Controller
             $roleUser->save();
         }
 
-       Log::addLog($request->user_id,json_encode($roleUser_old), 'Update RoleUser : '.$roleUser);
+        Log::addLog($request->user_id, json_encode($roleUser_old), 'Update RoleUser : ' . $roleUser);
 
         return response()->json([
             'message' => 'อัพเดทข้อมูลสำเร็จ'
         ], 201);
-
     }
 
     public function createPartner(Request $request)
@@ -232,12 +296,12 @@ class UserController extends Controller
 
         if ($validator->passes()) {
 
-            $exitUsers = User::where('code',$request->username)->first();
+            $exitUsers = User::where('code', $request->username)->first();
             //$exitUsers = Role_user::where('user_id',$users->id)->first();
-            if($exitUsers){
+            if ($exitUsers) {
                 return response()->json([
                     'message' => 'มีผู้ใช้ท่านนี้อยู่ในระบบแล้ว'
-                ],400);
+                ], 400);
             }
 
             $createPartner = new User();
@@ -260,7 +324,7 @@ class UserController extends Controller
             $roleUser->active = 1;
             $roleUser->save();
 
-            if($request->hasFile('logoPartner')){
+            if ($request->hasFile('logoPartner')) {
 
                 $image = $request->file('logoPartner');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -273,25 +337,24 @@ class UserController extends Controller
 
             // $roleUser->refresh();
 
-            Log::addLog($request->user_id, '', 'Create PartnerUser : '. $createPartner);
-            Log::addLog($request->user_id, '', 'Create RoleUser : '. $roleUser);
+            Log::addLog($request->user_id, '', 'Create PartnerUser : ' . $createPartner);
+            Log::addLog($request->user_id, '', 'Create RoleUser : ' . $roleUser);
 
             return response()->json([
                 'message' => 'เพิ่มข้อมูลสำเร็จ'
-            ],201);
-
+            ], 201);
         }
 
-        return response()->json(['error'=>$validator->errors()]);
+        return response()->json(['error' => $validator->errors()]);
     }
 
     //CreateUser from AgentSystem
-    public function createUserByAgentSystem(Request $request,$id,$role_id)
+    public function createUserByAgentSystem(Request $request, $id, $role_id)
     {
 
-        $exitUsers = Role_user::where('user_id',$id)->first();
+        $exitUsers = Role_user::where('user_id', $id)->first();
 
-        if($exitUsers){
+        if ($exitUsers) {
 
             $request->session()->put('loginId', $exitUsers->user_id);
 
@@ -307,8 +370,7 @@ class UserController extends Controller
 
             Alert::success('เข้าสู่ระบบสำเร็จ');
             return redirect('/');
-
-        }else{
+        } else {
             $roleUser = new Role_user();
             $roleUser->user_id = $id;
             $roleUser->role_id = $role_id;
@@ -316,11 +378,11 @@ class UserController extends Controller
             $roleUser->active = 1;
             $roleUser->save();
 
-            Log::addLog($roleUser->user_id, '', 'Create RoleUser : '. $roleUser);
+            Log::addLog($roleUser->user_id, '', 'Create RoleUser : ' . $roleUser);
 
             $request->session()->put('loginId', $roleUser->user_id);
 
-            $user = User::where('id', $roleUser->user_id)->orwhere('active',1)->first();
+            $user = User::where('id', $roleUser->user_id)->orwhere('active', 1)->first();
 
             DB::table('vbeyond_report.log_login')->insert([
                 'username' => $user->code,
@@ -336,13 +398,5 @@ class UserController extends Controller
             Alert::success('เข้าสู่ระบบสำเร็จ');
             return redirect('/');
         }
-
-
-
-
-
-
     }
-
-
 }

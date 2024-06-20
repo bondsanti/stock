@@ -259,7 +259,7 @@
                                     class="fa fa-save"></i> บันทึก</button>
                         </div>
                         <input type="hidden" class="form-control" id="user_id" name="user_id" placeholder=""
-                            autocomplete="off" value="{{ $dataLoginUser->id }}">
+                            autocomplete="off" value="{{ $dataLoginUser['user_id'] }}">
                     </form>
                 </div>
                 <!-- /.modal-content -->
@@ -286,7 +286,7 @@
 
             });
 
-            const user_id = {{ $dataLoginUser->id }};
+            const user_id = {{ $dataLoginUser['user_id'] }};
 
             //Create modal
             $('#Create').click(function() {

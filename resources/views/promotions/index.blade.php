@@ -390,7 +390,7 @@
 
                             @csrf
                             <input type="hidden" class="form-control" id="id_edit" name="id_edit">
-                            <input type="hidden" class="form-control" id="user_id" name="user_id" value="{{$dataLoginUser->id}}">
+                            <input type="hidden" class="form-control" id="user_id" name="user_id" value="{{$dataLoginUser['user_id']}}">
                             <div class="modal-body">
 
                                 <div class="box-body">
@@ -573,7 +573,7 @@
                 $('#expire').datepicker('setStartDate', selectedStartDate);
             });
 
-            const user_id = {{ $dataLoginUser->id }};
+            const user_id = {{ $dataLoginUser['user_id'] }};
             //Create modal
             $('#Create').click(function() {
                 $('#savedata').val("create");

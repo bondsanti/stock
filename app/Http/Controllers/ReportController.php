@@ -21,19 +21,20 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
-
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
         // dd($dataLoginUser);
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        // $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
 
         $projects = Project::orderBy('name', 'asc')->where('active', 1)->get()->filter(function ($value) use ($dataLoginUser) {
-            if ($dataLoginUser->high_rise == 1 && $dataLoginUser->low_rise == 1) {
+            if ($dataLoginUser['high_rise'] == 1 && $dataLoginUser['low_rise']== 1) {
                 return true;
             }
-            if ($dataLoginUser->high_rise == 1 && $value->project->high_rise == 1) {
+            if ($dataLoginUser['high_rise'] == 1 && $value->project->high_rise == 1) {
                 return true;
             }
-            if ($dataLoginUser->low_rise == 1 && $value->project->low_rise == 1) {
+            if ($dataLoginUser['high_rise'] == 1 && $value->project->low_rise == 1) {
                 return true;
             }
             return false;
@@ -138,9 +139,10 @@ class ReportController extends Controller
     public function search(Request $request)
     {
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
         // dd($dataLoginUser);
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
 
         $projects = Project::orderBy('name', 'asc')->where('active', 1)->get()->filter(function ($value) use ($dataLoginUser) {
             if ($dataLoginUser->high_rise == 1 && $dataLoginUser->low_rise == 1) {
@@ -316,18 +318,18 @@ class ReportController extends Controller
     public function searchIn()
     {
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+        $dataLoginUser = Session::get('loginId');
         // dd($dataLoginUser);
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
 
         $projects = Project::orderBy('name', 'asc')->where('active', 1)->get()->filter(function ($value) use ($dataLoginUser) {
-            if ($dataLoginUser->high_rise == 1 && $dataLoginUser->low_rise == 1) {
+            if ($dataLoginUser['high_rise'] == 1 && $dataLoginUser['low_rise']== 1) {
                 return true;
             }
-            if ($dataLoginUser->high_rise == 1 && $value->project->high_rise == 1) {
+            if ($dataLoginUser['high_rise'] == 1 && $value->project->high_rise == 1) {
                 return true;
             }
-            if ($dataLoginUser->low_rise == 1 && $value->project->low_rise == 1) {
+            if ($dataLoginUser['high_rise'] == 1 && $value->project->low_rise == 1) {
                 return true;
             }
             return false;
@@ -382,18 +384,19 @@ class ReportController extends Controller
     public function searchOut()
     {
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+       // $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
+       $dataLoginUser = Session::get('loginId');
         // dd($dataLoginUser);
-        $isRole = Role_user::where('user_id', Session::get('loginId'))->first();
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
 
         $projects = Project::orderBy('name', 'asc')->where('active', 1)->get()->filter(function ($value) use ($dataLoginUser) {
-            if ($dataLoginUser->high_rise == 1 && $dataLoginUser->low_rise == 1) {
+            if ($dataLoginUser['high_rise'] == 1 && $dataLoginUser['low_rise']== 1) {
                 return true;
             }
-            if ($dataLoginUser->high_rise == 1 && $value->project->high_rise == 1) {
+            if ($dataLoginUser['high_rise'] == 1 && $value->project->high_rise == 1) {
                 return true;
             }
-            if ($dataLoginUser->low_rise == 1 && $value->project->low_rise == 1) {
+            if ($dataLoginUser['high_rise'] == 1 && $value->project->low_rise == 1) {
                 return true;
             }
             return false;

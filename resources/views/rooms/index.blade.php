@@ -211,7 +211,7 @@
                                     @csrf
 
                                     <input type="hidden" class="form-control" id="user_id" name="user_id"
-                                        value="{{ $dataLoginUser->id }}">
+                                        value="{{ $dataLoginUser['user_id'] }}">
                                     <div class="modal-body">
 
                                         <div class="box-body">
@@ -421,7 +421,7 @@
                                     @csrf
 
                                     <input type="hidden" class="form-control" id="user_id" name="user_id"
-                                        value="{{ $dataLoginUser->id }}">
+                                        value="{{ $dataLoginUser['user_id'] }}">
                                     <div class="modal-body">
 
                                         <div class="box-body">
@@ -485,7 +485,7 @@
                                     @csrf
 
                                     <input type="hidden" class="form-control" id="user_id" name="user_id"
-                                        value="{{ $dataLoginUser->id }}">
+                                        value="{{ $dataLoginUser['user_id'] }}">
                                     <div class="modal-body">
 
                                         <div class="box-body">
