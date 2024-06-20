@@ -23,7 +23,7 @@
 
               </div>
               <div class="info">
-                  <a href="#" class="d-block">คุณ {{ $dataLoginUser['apiData'] }}</a>
+                  <a href="#" class="d-block">คุณ {{ $dataLoginUser->email }}</a>
               </div>
           </div>
 
