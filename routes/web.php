@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('rWGWxTKnAPQfShWUuxBuhPdE0a6kUe6eh5wEytp6td3LVLGqwRGFDSYBjpnmCe724CS6Dd33zZTt7WdKD55qVkWaYZ/{code}&{token}',[CustomAuthController::class,'AllowLoginConnect']);
 
 //login by agent system
-Route::get('/agent/{id}/{role_id}',[UserController::class,'createUserByAgentSystem']);
+Route::get('/agent/{id}/{role_id}/{code}',[UserController::class,'createUserByAgentSystem']);
 
 Route::middleware(['isAuth'])->group(function () {
     Route::get('/change-password',[CustomAuthController::class,'changePassword'])->name('change.password');

@@ -35,7 +35,7 @@ class UserController extends Controller
 
         // $users = Role_user::with('role:id,code,name_th,active','position:id,name')->orderBy('id', 'desc')->get();
 
-        $users = Role_user::orderBy('id', 'desc')->where('active',1)->get();
+        $users = Role_user::orderBy('id', 'desc')->where('active', 1)->get();
         $userIds = $users->pluck('user_id')->toArray(); // ดึง user_id เป็น array
 
 
@@ -209,20 +209,18 @@ class UserController extends Controller
 
             // วนลูปเพิ่มข้อมูลที่ได้จาก API ใน users collection
 
-                $userApiData = $apiData->firstWhere('user_id', $users->user_id);
-                if ($userApiData) {
-                    $users->api_data = [
-                        'code' => $userApiData['code'],
-                        'email' => $userApiData['email']
-                    ];
-                } else {
-                    $users->api_data = null;
-                }
-
+            $userApiData = $apiData->firstWhere('user_id', $users->user_id);
+            if ($userApiData) {
+                $users->api_data = [
+                    'code' => $userApiData['code'],
+                    'email' => $userApiData['email']
+                ];
+            } else {
+                $users->api_data = null;
+            }
         } else {
 
-                $users->api_data = null;
-
+            $users->api_data = null;
         }
         // dd($users);
         return response()->json($users, 200);
@@ -349,7 +347,7 @@ class UserController extends Controller
     }
 
     //CreateUser from AgentSystem
-    public function createUserByAgentSystem(Request $request, $id, $role_id)
+    public function createUserByAgentSystem(Request $request, $id, $role_id, $code)
     {
 
         $exitUsers = Role_user::where('user_id', $id)->first();
@@ -364,13 +362,41 @@ class UserController extends Controller
             //     'timeStm' => date('Y-m-d H:i:s'),
             //     'page' => 'Stock'
             // ]);
+            try {
+
+                $url = env('API_URL') . '/getAuth/' . $code;
+                $token = env('API_TOKEN_AUTH');
+
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $token
+                ])->get($url);
+                //dd($response);
+
+                if ($response->successful()) {
+                    $userData = $response->json()['data'];
+
+                        $request->session()->put('loginId', $userData);
+                        Alert::success('เข้าสู่ระบบสำเร็จ');
+                        return redirect('/');
+
+                } else {
+
+                    Alert::warning('ไม่พบผู้ใช้งาน', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
+                    return back();
+                }
+            } catch (\Exception $e) {
+
+                Alert::error('Error', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับ API ภายนอก');
+                return back();
+            }
 
 
-            Log::addLog($request->session()->get('loginId'), '', 'Login');
+            //Log::addLog($request->session()->get('loginId'), '', 'Login');
 
             Alert::success('เข้าสู่ระบบสำเร็จ');
             return redirect('/');
         } else {
+
             $roleUser = new Role_user();
             $roleUser->user_id = $id;
             $roleUser->role_id = $role_id;
@@ -378,25 +404,36 @@ class UserController extends Controller
             $roleUser->active = 1;
             $roleUser->save();
 
-            Log::addLog($roleUser->user_id, '', 'Create RoleUser : ' . $roleUser);
-
-            $request->session()->put('loginId', $roleUser->user_id);
-
-            $user = User::where('id', $roleUser->user_id)->orwhere('active', 1)->first();
-
-            // DB::table('vbeyond_report.log_login')->insert([
-            //     'username' => $user->code,
-            //     'dates' => date('Y-m-d'),
-            //     'timeStm' => date('Y-m-d H:i:s'),
-            //     'page' => 'Stock'
-            // ]);
+            //Log::addLog($roleUser->user_id, '', 'Create RoleUser : ' . $roleUser);
 
 
-            Log::addLog($request->session()->get('loginId'), '', 'Login');
+            try {
 
+                $url = env('API_URL') . '/getAuth/' . $code;
+                $token = env('API_TOKEN_AUTH');
 
-            Alert::success('เข้าสู่ระบบสำเร็จ');
-            return redirect('/');
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $token
+                ])->get($url);
+                //dd($response);
+
+                if ($response->successful()) {
+                    $userData = $response->json()['data'];
+
+                        $request->session()->put('loginId', $userData);
+                        Alert::success('เข้าสู่ระบบสำเร็จ');
+                        return redirect('/');
+
+                } else {
+
+                    Alert::warning('ไม่พบผู้ใช้งาน', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
+                    return back();
+                }
+            } catch (\Exception $e) {
+
+                Alert::error('Error', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับ API ภายนอก');
+                return back();
+            }
         }
     }
 }
