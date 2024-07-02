@@ -358,12 +358,12 @@ class UserController extends Controller
 
             $request->session()->put('loginId', $exitUsers->user_id);
 
-            DB::table('vbeyond_report.log_login')->insert([
-                'username' => $exitUsers->user_id,
-                'dates' => date('Y-m-d'),
-                'timeStm' => date('Y-m-d H:i:s'),
-                'page' => 'Stock'
-            ]);
+            // DB::table('vbeyond_report.log_login')->insert([
+            //     'username' => $exitUsers->user_id,
+            //     'dates' => date('Y-m-d'),
+            //     'timeStm' => date('Y-m-d H:i:s'),
+            //     'page' => 'Stock'
+            // ]);
 
 
             Log::addLog($request->session()->get('loginId'), '', 'Login');
@@ -384,12 +384,12 @@ class UserController extends Controller
 
             $user = User::where('id', $roleUser->user_id)->orwhere('active', 1)->first();
 
-            DB::table('vbeyond_report.log_login')->insert([
-                'username' => $user->code,
-                'dates' => date('Y-m-d'),
-                'timeStm' => date('Y-m-d H:i:s'),
-                'page' => 'Stock'
-            ]);
+            // DB::table('vbeyond_report.log_login')->insert([
+            //     'username' => $user->code,
+            //     'dates' => date('Y-m-d'),
+            //     'timeStm' => date('Y-m-d H:i:s'),
+            //     'page' => 'Stock'
+            // ]);
 
 
             Log::addLog($request->session()->get('loginId'), '', 'Login');
