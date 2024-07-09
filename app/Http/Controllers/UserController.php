@@ -375,10 +375,9 @@ class UserController extends Controller
                 if ($response->successful()) {
                     $userData = $response->json()['data'];
 
-                        $request->session()->put('loginId', $userData);
-                        Alert::success('เข้าสู่ระบบสำเร็จ');
-                        return redirect('/');
-
+                    $request->session()->put('loginId', $userData);
+                    Alert::success('เข้าสู่ระบบสำเร็จ');
+                    return redirect('/');
                 } else {
 
                     Alert::warning('ไม่พบผู้ใช้งาน', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
@@ -420,10 +419,9 @@ class UserController extends Controller
                 if ($response->successful()) {
                     $userData = $response->json()['data'];
 
-                        $request->session()->put('loginId', $userData);
-                        Alert::success('เข้าสู่ระบบสำเร็จ');
-                        return redirect('/');
-
+                    $request->session()->put('loginId', $userData);
+                    Alert::success('เข้าสู่ระบบสำเร็จ');
+                    return redirect('/');
                 } else {
 
                     Alert::warning('ไม่พบผู้ใช้งาน', 'กรุณากรอกข้อมูลใหม่อีกครั้ง');
@@ -436,4 +434,56 @@ class UserController extends Controller
             }
         }
     }
+
+    //API Create RoleUser
+    public function createUserRoleByAPI(Request $request ,$user_id)
+    {
+        // dd($user_id);
+
+        $roleUser = Role_user::where('user_id', $user_id)->first();
+        //dd($roleUser);
+        if (!$roleUser) {
+            $dept = $request->role_type == 'Partner' ? $request->dept : ($request->dept ?? '');
+
+            $roleUser = new Role_user();
+            $roleUser->user_id = $user_id;
+            $roleUser->role_type = $request->role_type;
+            $roleUser->dept = $dept;
+            $roleUser->active = 1;
+            $roleUser->save();
+
+            Log::addLog($user_id, '', 'Create RoleUser : ' . $roleUser);
+            return response()->json([
+                'message' => 'เพิ่มข้อมูลสำเร็จ'
+            ], 201);
+        } else {
+            $roleUser_old = $roleUser->toArray();
+            $dept = $request->role_type == 'Partner' ? $request->dept_edit : ($request->dept_edit ?? '');
+
+            $roleUser->role_type = $request->role_type;
+            $roleUser->dept = $dept;
+            $roleUser->save();
+
+            Log::addLog($user_id, json_encode($roleUser_old), 'Update RoleUser : ' . $roleUser);
+
+            return response()->json([
+                'message' => 'อัพเดทข้อมูลสำเร็จ'
+            ], 201);
+        }
+    }
+
+    //API GetUser usersList
+    public function userListAPI(Request $request ,$user_id)
+    {
+
+        //$userIdsArray = explode(',', $user_ids);
+        $users = Role_user::where('user_id', $user_id)->get();
+
+        if ($users->isEmpty()) {
+            return response()->json(['message' => 'ไม่พบผู้ใช้งานระบบ'], 404);
+        }
+
+        return response()->json(['data' => $users], 200);
+    }
+
 }

@@ -338,13 +338,13 @@
                                         <p>ทีม</p>
                                     </a>
                                   </li>
-                                  <li class="nav-item">
+                                  {{-- <li class="nav-item">
                                       <a href="{{ route('user') }}"
                                           class="nav-link {{ request()->routeIs('user') ? 'active' : '' }}">
                                           <i class="fa fa-user nav-icon"></i>
                                           <p>ผู้ใช้งานระบบ</p>
                                       </a>
-                                  </li>
+                                  </li> --}}
 
                               </ul>
                           </li>

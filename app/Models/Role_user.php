@@ -10,6 +10,7 @@ class Role_user extends Model
     use HasFactory;
     protected $connection = 'mysql';
     protected $table = 'role_user';
+    // protected $primaryKey = 'user_id';
 
     public function user_ref()
     {
