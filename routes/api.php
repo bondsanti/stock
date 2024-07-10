@@ -102,4 +102,5 @@ Route::get('/sendmail/expfile',[SendMailContoller::class,'fileExp']);
 
 // api createRoleBy VBNext
 Route::post('/create-role/{user_id}',[UserController::class,'createUserRoleByAPI'])->middleware(['checkTokenApi']);
-Route::get('/users-list/{user_id}',[UserController::class,'userListAPI'])->middleware(['checkTokenApi']);
+// Route::get('/users-list/{user_id}',[UserController::class,'userListAPI'])->middleware(['checkTokenApi']);
+Route::get('/users-list/{user_id}',[UserController::class,'userListAPI']);
