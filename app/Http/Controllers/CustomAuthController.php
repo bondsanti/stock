@@ -44,6 +44,14 @@ class CustomAuthController extends Controller
             ])->get($url);
                 //dd($response);
 
+                $url_log = env('API_URL') . '/create/login/log/' . $code . ',stock';
+                //insert loglogin
+                $response_log = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $token
+                ])->post($url_log);
+                if ($response_log->successful()) {
+                }
+
             if ($response->successful()) {
                 $userData = $response->json()['data'];
 
@@ -94,6 +102,13 @@ class CustomAuthController extends Controller
                 'Authorization' => 'Bearer '.$tokenapi
             ])->get($url);
 
+            $url_log = env('API_URL') . '/create/login/log/' . $code . ',stock';
+            //insert loglogin
+            $response_log = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $tokenapi
+            ])->post($url_log);
+            if ($response_log->successful()) {
+            }
             //dd($response);
             if ($response->successful()) {
                 $userData = $response->json()['data'];
