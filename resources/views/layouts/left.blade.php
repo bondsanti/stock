@@ -18,8 +18,8 @@
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel mt-3 pb-3 mb-3 d-flex">
               <div class="image">
-
-                  <img src="{{ $dataLoginUser['fileExists'] ? $dataLoginUser['remoteFile'] : url('uploads/avatar.png') }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{url('uploads/avatar.png') }}" class="img-circle elevation-2" alt="User Image">
+                  {{-- <img src="{{ $dataLoginUser['fileExists'] ? $dataLoginUser['remoteFile'] : url('uploads/avatar.png') }}" class="img-circle elevation-2" alt="User Image"> --}}
 
               </div>
               <div class="info">
@@ -178,12 +178,12 @@
                       @endif
                       @if ($isRole->role_type != 'Partner')
                           <li class="nav-item">
-                              <a href="{{ route('rentral') }}"
+                              <a href=""
                                   class="nav-link {{ request()->routeIs('rentral') ? 'active' : '' }} {{ request()->routeIs('rentral.search') ? 'active' : '' }}">
                                   <i class="nav-icon fas fa-person-shelter"></i>
                                   <p>
                                       ห้องเช่า
-                                      {{-- <span class="right badge badge-danger">New</span> --}}
+                                      <span class="right badge badge-secondary">Disabled</span>
                                   </p>
                               </a>
                           </li>
