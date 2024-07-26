@@ -77,11 +77,13 @@ class RoomController extends Controller
 
         $message = "";
 
-        $dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId')['user_id'])->first();
-        $isRole = Role_user::where('user_id',Session::get('loginId')['user_id'])->first();
+        $dataLoginUser = Session::get('loginId');
+        //dd($dataLoginUser);
+        $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
-        $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
+        // $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
+        $rooms = Room::with(['project', 'plan', 'status'])->where('id', $id)->first();
         $furniture = Furniture::orderBy('id', 'asc')->get();
         $facility = Facility::orderBy('id', 'asc')->get();
         $status = Status_Room::orderBy('id', 'asc')->get();
@@ -103,9 +105,9 @@ class RoomController extends Controller
         $projects = Project::orderBy('name', 'asc')->where('active', 1)->get();
 
         //API CUSOMTER
-        $customers = DB::connection('mysql_report')->table('product')
-            ->select('pid', DB::raw('CONCAT(name, " ", bank) as name'), 'bank')
-            ->get();
+        // $customers = DB::connection('mysql_report')->table('product')
+        //     ->select('pid', DB::raw('CONCAT(name, " ", bank) as name'), 'bank')
+        //     ->get();
         if ($isRole->role_type == "User" && $isRole->dept == "Finance") {
 
             return view('rooms.finance.edit', compact(
@@ -115,7 +117,7 @@ class RoomController extends Controller
                 'furniture',
                 'facility',
                 'status',
-                'customers',
+                // 'customers',
                 'promotions',
                 'isRole',
                 'message'
@@ -128,7 +130,7 @@ class RoomController extends Controller
                 'furniture',
                 'facility',
                 'status',
-                'customers',
+                // 'customers',
                 'promotions',
                 'isRole',
                 'message'
@@ -146,7 +148,8 @@ class RoomController extends Controller
         $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
-        $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
+        // $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
+        $rooms = Room::with(['project', 'plan', 'status'])->where('id', $id)->first();
         $furniture = Furniture::orderBy('id', 'asc')->get();
         $facility = Facility::orderBy('id', 'asc')->get();
         $status = Status_Room::orderBy('id', 'asc')->get();
@@ -165,23 +168,11 @@ class RoomController extends Controller
             $message = 'หมดการันตี ' . $rooms->guarantee_end;
         }
 
-        // $projects = Project::orderBy('name', 'asc')->where('active',1)->get()->filter(function ($value) use ($dataLoginUser) {
-        // 	if ($dataLoginUser->high_rise == 1 && $dataLoginUser->low_rise == 1) {
-        // 		return true;
-        // 	}
-        // 	if ($dataLoginUser->high_rise == 1 && $value->project->high_rise == 1) {
-        // 		return true;
-        // 	}
-        // 	if ($dataLoginUser->low_rise == 1 && $value->project->low_rise == 1) {
-        // 		return true;
-        // 	}
-        // 	return false;
-        // });
         $projects = Project::orderBy('name', 'asc')->where('active', 1)->get();
 
-        $customers = DB::connection('mysql_report')->table('product')
-            ->select('pid', DB::raw('CONCAT(name, " ", bank) as name'), 'bank')
-            ->get();
+        // $customers = DB::connection('mysql_report')->table('product')
+        //     ->select('pid', DB::raw('CONCAT(name, " ", bank) as name'), 'bank')
+        //     ->get();
 
         return view('rooms.partner.edit', compact(
             'dataLoginUser',
@@ -190,7 +181,7 @@ class RoomController extends Controller
             'furniture',
             'facility',
             'status',
-            'customers',
+            // 'customers',
             'promotions',
             'isRole',
             'message'
@@ -206,7 +197,8 @@ class RoomController extends Controller
         $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         //dd($isRole);
 
-        $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
+        // $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
+        $rooms = Room::with(['project', 'plan', 'status'])->where('id', $id)->first();
         $furniture = Furniture::orderBy('id', 'asc')->get();
         $facility = Facility::orderBy('id', 'asc')->get();
         $status = Status_Room::orderBy('id', 'asc')->get();
@@ -225,23 +217,12 @@ class RoomController extends Controller
             $message = 'หมดการันตี ' . $rooms->guarantee_end;
         }
 
-        // $projects = Project::orderBy('name', 'asc')->where('active',1)->get()->filter(function ($value) use ($dataLoginUser) {
-        // 	if ($dataLoginUser->high_rise == 1 && $dataLoginUser->low_rise == 1) {
-        // 		return true;
-        // 	}
-        // 	if ($dataLoginUser->high_rise == 1 && $value->project->high_rise == 1) {
-        // 		return true;
-        // 	}
-        // 	if ($dataLoginUser->low_rise == 1 && $value->project->low_rise == 1) {
-        // 		return true;
-        // 	}
-        // 	return false;
-        // });
+
         $projects = Project::orderBy('name', 'asc')->where('active', 1)->get();
 
-        $customers = DB::connection('mysql_report')->table('product')
-            ->select('pid', DB::raw('CONCAT(name, " ", bank) as name'), 'bank')
-            ->get();
+        // $customers = DB::connection('mysql_report')->table('product')
+        //     ->select('pid', DB::raw('CONCAT(name, " ", bank) as name'), 'bank')
+        //     ->get();
 
         return view('rooms.detail', compact(
             'dataLoginUser',
@@ -250,7 +231,7 @@ class RoomController extends Controller
             'furniture',
             'facility',
             'status',
-            'customers',
+            // 'customers',
             'promotions',
             'isRole',
             'message'
@@ -267,11 +248,11 @@ class RoomController extends Controller
             return response()->json('');
         }
 
-        DB::connection('mysql_report')->table('product')->where('pid', $room->pid)->update([
-            'RoomNo' => '',
-            'Homeno' => '',
-            'project_id' => 0,
-        ]);
+        // DB::connection('mysql_report')->table('product')->where('pid', $room->pid)->update([
+        //     'RoomNo' => '',
+        //     'Homeno' => '',
+        //     'project_id' => 0,
+        // ]);
         $room->user_name = null;
         $room->pid = null;
         $room->status_id = 1;
@@ -412,10 +393,10 @@ class RoomController extends Controller
         //dd($request->all());
         $rooms = Room::where('id', $request->room_id)->first();
 
-        $projects = DB::connection('mysql_report')
-            ->table('project')
-            ->where('pid', $request->project_id)
-            ->first();
+        // $projects = DB::connection('mysql_report')
+        //     ->table('project')
+        //     ->where('pid', $request->project_id)
+        //     ->first();
 
         $rooms_old = $rooms->toArray();
 
@@ -667,7 +648,11 @@ class RoomController extends Controller
         $status = $query->get();
 
 
-        $rooms = Room::with(['project', 'plan', 'user', 'status', 'booking'])
+        // $rooms = Room::with(['project', 'plan', 'user', 'status', 'booking'])
+        //     ->whereHas('project', function ($query) {
+        //         $query->where('active', 1);
+        //     });
+            $rooms = Room::with(['project', 'plan', 'status', 'booking'])
             ->whereHas('project', function ($query) {
                 $query->where('active', 1);
             });
@@ -793,7 +778,7 @@ class RoomController extends Controller
                 if ($roomsID && $roomsID->status_id === 0) {
                     // ส่งอีเมล์ได้
                     $project = Project::where('id', '=', $roomsID->project_id)->first();
-                    $url = "http://vbstock.vbeyond.co.th";
+                    $url = "https://vbstock.vbeyond.co.th";
                     // $toEmail = ['santi.c@vbeyond.co.th'];
                     // $toCC = ['sirawich.t@vbeyond.co.th'];
                     // $toEmail = ['santi.c@vbeyond.co.th'];
@@ -921,13 +906,13 @@ class RoomController extends Controller
         $rooms = Room::where('id', $id)->first();
         $rooms_old = $rooms->toArray();
 
-        if ($rooms->pid) {
-            DB::connection('mysql_report')->table('product')->where('pid', $rooms->pid)->update([
-                'RoomNo' => '',
-                'Homeno' => '',
-                'project_id' => 0,
-            ]);
-        }
+        // if ($rooms->pid) {
+        //     DB::connection('mysql_report')->table('product')->where('pid', $rooms->pid)->update([
+        //         'RoomNo' => '',
+        //         'Homeno' => '',
+        //         'project_id' => 0,
+        //     ]);
+        // }
         $rooms->user_name = null;
         $rooms->name = null;
         $rooms->pid = null;
@@ -974,7 +959,8 @@ class RoomController extends Controller
 
     public function retakeRoomToRent(Request $request, $id, $user_id)
     {
-        $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
+        // $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
+        $rooms = Room::with(['project', 'plan', 'status'])->where('id', $id)->first();
         $rooms_old = $rooms->toArray();
         $this->newRentRoom($rooms, 'เบิกจ่ายล่วงหน้า');
 
