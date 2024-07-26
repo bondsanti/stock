@@ -349,7 +349,7 @@
                             </div>
 
                             <input type="hidden" class="form-control" id="user_id" name="user_id" placeholder=""
-                                autocomplete="off" value="{{ $dataLoginUser->id }}">
+                                autocomplete="off" value="{{ $dataLoginUser['user_id'] }}">
 
                             <input type="hidden" class="form-control" id="roomId" name="roomId" placeholder=""
                                 autocomplete="off" value="{{ $rooms->id }}">
@@ -520,7 +520,7 @@
                                         class="fa fa-save"></i> อัพเดท</button>
                             </div>
                             <input type="hidden" class="form-control" id="user_id" name="user_id" placeholder=""
-                                autocomplete="off" value="{{ $dataLoginUser->id }}">
+                                autocomplete="off" value="{{ $dataLoginUser['user_id'] }}">
                             <input type="hidden" class="form-control" id="id" name="id" placeholder=""
                                 autocomplete="off" value="">
                             <input type="hidden" class="form-control" id="rooms_id" name="rooms_id" placeholder=""

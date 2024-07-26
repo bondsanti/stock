@@ -27,6 +27,7 @@ class BookingController extends Controller
     {
         //$dataLoginUser = User::with('role_position:id,name')->where('id', Session::get('loginId'))->first();
         $dataLoginUser = Session::get('loginId');
+        //dd($dataLoginUser);
         $isRole = Role_user::where('user_id', Session::get('loginId')['user_id'])->first();
         // $rooms = Room::with(['project', 'plan', 'user', 'status'])->where('id', $id)->first();
         $rooms = Room::with(['project', 'plan', 'status'])->where('id', $id)->first();
