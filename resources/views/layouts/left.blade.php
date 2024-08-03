@@ -18,7 +18,7 @@
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel mt-3 pb-3 mb-3 d-flex">
               <div class="image">
-                <img src="{{url('uploads/avatar.png') }}" class="img-circle elevation-2" alt="User Image">
+                  <img src="{{ url('uploads/avatar.png') }}" class="img-circle elevation-2" alt="User Image">
                   {{-- <img src="{{ $dataLoginUser['fileExists'] ? $dataLoginUser['remoteFile'] : url('uploads/avatar.png') }}" class="img-circle elevation-2" alt="User Image"> --}}
 
               </div>
@@ -178,12 +178,12 @@
                       @endif
                       @if ($isRole->role_type != 'Partner')
                           <li class="nav-item">
-                              <a href=""
+                              <a href="{{route('rentral')}}"
                                   class="nav-link {{ request()->routeIs('rentral') ? 'active' : '' }} {{ request()->routeIs('rentral.search') ? 'active' : '' }}">
                                   <i class="nav-icon fas fa-person-shelter"></i>
                                   <p>
                                       ห้องเช่า
-                                      <span class="right badge badge-secondary">Disabled</span>
+                                      {{-- <span class="right badge badge-secondary">Disabled</span> --}}
                                   </p>
                               </a>
                           </li>
@@ -221,13 +221,13 @@
                           </li>
                       @endif
                       @if ($isRole->role_type == 'Staff')
-                      <li class="nav-item">
-                        <a href="{{ route('team') }}"
-                            class="nav-link {{ request()->routeIs('team') ? 'active' : '' }}">
-                            <i class="fa fa-users nav-icon"></i>
-                            <p>ทีม</p>
-                        </a>
-                      </li>
+                          <li class="nav-item">
+                              <a href="{{ route('team') }}"
+                                  class="nav-link {{ request()->routeIs('team') ? 'active' : '' }}">
+                                  <i class="fa fa-users nav-icon"></i>
+                                  <p>ทีม</p>
+                              </a>
+                          </li>
                       @endif
                       @if ($isRole->role_type == 'User')
                           @if ($isRole->dept == 'Marketing')
@@ -262,46 +262,46 @@
                                   </a>
                               </li>
                           @endif
-                        @elseif ($isRole->role_type == 'Admin')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" target="_blank">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>
-                                    คู่มือใช้งาน
-                                    <span class="right badge badge-light">Coming soon</span>
-                                </p>
-                            </a>
-                        </li>
-                        @elseif ($isRole->role_type == 'Staff')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" target="_blank">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>
-                                    คู่มือใช้งาน
-                                    <span class="right badge badge-light">Coming soon</span>
-                                </p>
-                            </a>
-                        </li>
-                        @elseif ($isRole->role_type == 'SuperAdmin')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" target="_blank">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>
-                                    คู่มือใช้งาน
-                                    <span class="right badge badge-light">Coming soon</span>
-                                </p>
-                            </a>
-                        </li>
-                        @else
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" target="_blank">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>
-                                    คู่มือใช้งาน
-                                    <span class="right badge badge-light">Coming soon</span>
-                                </p>
-                            </a>
-                        </li>
+                      @elseif ($isRole->role_type == 'Admin')
+                          <li class="nav-item">
+                              <a href="#" class="nav-link" target="_blank">
+                                  <i class="nav-icon fas fa-book"></i>
+                                  <p>
+                                      คู่มือใช้งาน
+                                      <span class="right badge badge-light">Coming soon</span>
+                                  </p>
+                              </a>
+                          </li>
+                      @elseif ($isRole->role_type == 'Staff')
+                          <li class="nav-item">
+                              <a href="#" class="nav-link" target="_blank">
+                                  <i class="nav-icon fas fa-book"></i>
+                                  <p>
+                                      คู่มือใช้งาน
+                                      <span class="right badge badge-light">Coming soon</span>
+                                  </p>
+                              </a>
+                          </li>
+                      @elseif ($isRole->role_type == 'SuperAdmin')
+                          <li class="nav-item">
+                              <a href="#" class="nav-link" target="_blank">
+                                  <i class="nav-icon fas fa-book"></i>
+                                  <p>
+                                      คู่มือใช้งาน
+                                      <span class="right badge badge-light">Coming soon</span>
+                                  </p>
+                              </a>
+                          </li>
+                      @else
+                          <li class="nav-item">
+                              <a href="#" class="nav-link" target="_blank">
+                                  <i class="nav-icon fas fa-book"></i>
+                                  <p>
+                                      คู่มือใช้งาน
+                                      <span class="right badge badge-light">Coming soon</span>
+                                  </p>
+                              </a>
+                          </li>
                       @endif
 
                       {{-- <li class="nav-header" style="background-color: rgba(255, 23, 35, 0.486)">สำหรับผู้ดูแลระบบ</li> --}}
@@ -332,11 +332,11 @@
                                       </a>
                                   </li>
                                   <li class="nav-item">
-                                    <a href="{{ route('team') }}"
-                                        class="nav-link {{ request()->routeIs('team') ? 'active' : '' }}">
-                                        <i class="fa fa-users nav-icon"></i>
-                                        <p>ทีม</p>
-                                    </a>
+                                      <a href="{{ route('team') }}"
+                                          class="nav-link {{ request()->routeIs('team') ? 'active' : '' }}">
+                                          <i class="fa fa-users nav-icon"></i>
+                                          <p>ทีม</p>
+                                      </a>
                                   </li>
                                   {{-- <li class="nav-item">
                                       <a href="{{ route('user') }}"

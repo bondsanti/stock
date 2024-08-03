@@ -44,11 +44,11 @@ class CustomAuthController extends Controller
             ])->get($url);
                 //dd($response);
 
-                $url_log = env('API_URL') . '/create/login/log/' . $code . ',stock';
+                $url_log = env('API_URL') . '/logs/login/' . $code . ',stock';
                 //insert loglogin
                 $response_log = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token
-                ])->post($url_log);
+                ])->get($url_log);
                 if ($response_log->successful()) {
                 }
 
@@ -57,6 +57,7 @@ class CustomAuthController extends Controller
 
                 if (Hash::check($password, $userData['password'])) {
                     $request->session()->put('loginId',$userData);
+                    Log::addLog($userData['user_id'], '', 'Logout');
                     Alert::success('เข้าสู่ระบบสำเร็จ');
                     return redirect('/');
                 } else {
@@ -81,7 +82,7 @@ class CustomAuthController extends Controller
 
         if ($request->session()->has('loginId')) {
 
-           // Log::addLog($request->session()->get('loginId.id'), '', 'Logout');
+           Log::addLog($request->session()->get('loginId')['user_id'], '', 'Logout');
 
             $request->session()->pull('loginId');
             Alert::success('ออกจากระบบเรียบร้อย', 'ไว้พบกันใหม่ :)');
@@ -95,18 +96,18 @@ class CustomAuthController extends Controller
         //dd($token);
         try {
 
-            $url = env('API_URL') . '/checktoken/out/' . $token;
+            $url = env('API_URL') . '/token/check/out/' . $token;
             $tokenapi = env('API_TOKEN_AUTH');
            //dd($url);
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer '.$tokenapi
             ])->get($url);
 
-            $url_log = env('API_URL') . '/create/login/log/' . $code . ',stock';
+            $url_log = env('API_URL') . '/logs/login/' . $code . ',stock';
             //insert loglogin
             $response_log = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $tokenapi
-            ])->post($url_log);
+            ])->get($url_log);
             if ($response_log->successful()) {
             }
             //dd($response);
@@ -114,6 +115,7 @@ class CustomAuthController extends Controller
                 $userData = $response->json()['data'];
 
                     $request->session()->put('loginId',$userData);
+                    Log::addLog($userData['user_id'], 'Login', 'AllowLoginConnect By VBNext');
                     Alert::success('เข้าสู่ระบบสำเร็จ');
                     return redirect('/');
 

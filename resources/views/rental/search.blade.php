@@ -54,8 +54,8 @@
                                             <select name="pid" id="pid" class="form-control">
                                                 <option value="all">โครงการ ทั้งหมด</option>
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->pid }}">{{ $project->Project_Name }}</option>
-                                                @endforeach
+                                                <option value="{{ $project['project_id'] }}">{{ $project['Project_Name'] }}</option>
+                                            @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -65,7 +65,7 @@
                                             <select name="status" id="status" class="form-control">
                                                 <option value="all">สถานะห้องเช่า ทั้งหมด</option>
                                                 @foreach ($status as $item)
-                                                    <option value="{{ $item->name }}">{{ $item->name }} </option>
+                                                    <option value="{{ $item['status_room'] }}">{{ $item['status_room'] }} </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -171,33 +171,33 @@
                                     @foreach ($rents as $item)
                                         <tr>
                                             <td>{{ $loop->index + 1 }}</td>
-                                            <td>{{ $item->Project_Name }}</td>
-                                            <td>{{ $item->RoomNo }}</td>
-                                            <td>{{ $item->HomeNo }}</td>
-                                            <td>{{ $item->RoomType }}</td>
-                                            <td>{{ $item->Size }}</td>
-                                            <td>{{ number_format($item->price) }}</td>
-                                            <td>{{ $item->rental_status }}</td>
-                                            <td>{{ $item->Status_Room }}</td>
-                                            <td>{{ $item->Contract_Status }}</td>
+                                            <td>{{ $item['Project_Name'] }}</td>
+                                            <td>{{ $item['RoomNo'] }}</td>
+                                            <td>{{ $item['HomeNo'] }}</td>
+                                            <td>{{ $item['RoomType'] }}</td>
+                                            <td>{{ $item['Size'] }}</td>
+                                            <td>{{ number_format($item['price']) }}</td>
+                                            <td>{{ $item['rental_status'] }}</td>
+                                            <td>{{ $item['Status_Room'] }}</td>
+                                            <td>{{ $item['Contract_Status'] }}</td>
                                             <td>
-                                            @if ($item->rental_status=="การันตี")
-                                                @if ($item->Guarantee_Enddate)
-                                                {{ date('d/m/Y', strtotime($item->Guarantee_Enddate)) }}
+                                            @if ($item['rental_status']=="การันตี")
+                                                @if ($item['Guarantee_Enddate'])
+                                                {{ date('d/m/Y', strtotime($item['Guarantee_Enddate'])) }}
                                                 @else
                                                     -
                                                 @endif
                                             @else
-                                                @if ($item->date_endrend)
-                                                {{ date('d/m/Y', strtotime($item->date_endrend)) }}
+                                                @if ($item['date_endrend'])
+                                                {{ date('d/m/Y', strtotime($item['date_endrend'])) }}
                                                 @else
                                                     -
                                                 @endif
                                             @endif
                                             </td>
                                             <td>
-                                                @if ($item->Contract_Enddate)
-                                                {{ date('d/m/Y', strtotime($item->Contract_Enddate)) }}
+                                                @if ($item['Contract_Enddate'])
+                                                {{ date('d/m/Y', strtotime($item['Contract_Enddate'])) }}
                                             @else
                                                 -
                                             @endif

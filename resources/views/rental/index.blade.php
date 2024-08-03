@@ -38,7 +38,7 @@
                                             <select name="pid" id="pid" class="form-control">
                                                 <option value="all">โครงการ ทั้งหมด</option>
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->pid }}">{{ $project->Project_Name }}</option>
+                                                    <option value="{{ $project['project_id'] }}">{{ $project['Project_Name'] }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -49,7 +49,7 @@
                                             <select name="status" id="status" class="form-control">
                                                 <option value="all">สถานะห้องเช่า ทั้งหมด</option>
                                                 @foreach ($status as $item)
-                                                    <option value="{{ $item->name }}">{{ $item->name }} </option>
+                                                    <option value="{{ $item['status_room'] }}">{{ $item['status_room'] }} </option>
                                                 @endforeach
                                             </select>
                                         </div>
