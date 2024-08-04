@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Rent;
 use App\Models\Status_Rent;
 use Illuminate\Support\Facades\Http;
+use RealRashid\SweetAlert\Facades\Alert;
 use DB;
 use Illuminate\Http\Request;
 
