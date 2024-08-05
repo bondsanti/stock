@@ -82,8 +82,8 @@ class RentralController extends Controller
 
         try {
 
-            $url = env('API_RENTAL') . '/project-rent';
-            $url2 = env('API_RENTAL') . '/status-rent';
+            $url = env('API_URL') . '/rental/project-rent';
+            $url2 = env('API_URL') . '/rental/status-rent';
             $tokenapi = env('API_TOKEN_AUTH');
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $tokenapi
@@ -259,9 +259,9 @@ class RentralController extends Controller
         $formInputs = $request->all();
         try {
 
-            $url = env('API_RENTAL') . '/project-rent';
-            $url2 = env('API_RENTAL') . '/status-rent';
-            $url3 = env('API_RENTAL') . '/search-rental';
+            $url = env('API_URL') . '/rental/project-rent';
+            $url2 = env('API_URL') . '/rental/status-rent';
+            $url3 = env('API_URL') . '/rental/search-rental';
             $tokenapi = env('API_TOKEN_AUTH');
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $tokenapi
